@@ -258,6 +258,50 @@ First, switch to the right project.
 1. Open ``5_adding_sensors/main.h``.
 1. **Important:** First, on line 7, change the name of your device to a unique identifier (shorter than 15 characters).
 
+### Temperature sensor
+
+1. Place the sensor on your breadboard. 
+1. The rounded side is the back of the sensor. **Don't get this wrong or you'll blow up the sensor!**
+1. Seen from the front, connect:
+1. Left pin to 5V.
+1. Middle pin to A4.
+1. Right pin to GND.
+
+In `5_adding_sensors\main.cpp` under 'YOUR CODE HERE' add:
+
+```cpp
+// LM-35 is an analog temperatur sensor
+AnalogIn temp(A4);
+
+void readSensorState() {
+    // Wait 5 seconds for the BLE stack to start
+    wait_ms(5000);
+
+    // This is in a separate thread, so we can just spin forever
+    while (1) {
+        // Do 10 readings to smooth the values out
+        float total = 0.0f;
+        for (uint8_t ix = 0; ix < 10; ix++) {
+            total += temp.read();
+            wait_ms(1);
+        }
+
+        // Divide total by 10 again
+        float val = total / 10.0f;
+        // The pin is 3.3V and the sensor is sending 0.1 mV per degree Celcius
+        float temperature = (val * 3300.0f / 10.0f);
+
+        printf("temperature is %.2fC\r\n", temperature);
+
+        // And write back to the BLE characteristic
+        mySensorState = static_cast<uint32_t>(temperature * 100.0f);
+
+        // Wait 2 seconds before the next reading
+        wait_ms(2000);
+    }
+}
+```
+
 ### Ultrasonic distance sensor
 
 1. Place the sensor on your breadboard.
@@ -292,6 +336,39 @@ void readSensorState() {
         long dist = ultrasonic.distance();
         printf("distance is %d\r\n", dist);
         mySensorState = dist;
+
+        // then sleep for 2 seconds
+        wait_ms(2000);
+    }
+}
+```
+
+Verify that you can see the values update in nRF Connect.
+
+### Light sensor
+
+1. Place the sensor on your breadboard.
+1. Connect one end of the sensor to 5V.
+1. Connect the other end of the sensor to pin `A5`.
+1. From the same end as in 3. add a resistor (300-500 Ohm).
+1. Connect the other end of the resistor to `GND`.
+1. [Here's an image](https://openhomeautomation.net/wp-content/uploads/2013/03/photocell_bb-small.png).
+
+In `5_adding_sensors\main.cpp` under 'YOUR CODE HERE' add:
+
+```cpp
+AnalogIn light(A5);
+
+// this will be running in a separate thread
+void readSensorState() {
+    // give the BLE stack 5 seconds to start up
+    wait_ms(5000);
+
+    while (1) {
+        // read the value, print it and update the BLE variable
+        uint16_t val = light.read_u16();
+        printf("value is %d\r\n", val);
+        mySensorState = val;
 
         // then sleep for 2 seconds
         wait_ms(2000);
