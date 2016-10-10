@@ -1,6 +1,6 @@
-# *XYZ* - Building Bluetooth devices - Instructions
+# Ada Lovelace Hackathon - Building Bluetooth devices - Instructions
 
-Welcome to our session at *XYZ*! If you have any questions, please just give a shout. We are here to help.
+Welcome to our session at the Ada Lovelace Hackathon! If you have any questions, please just give a shout. We are here to help.
 
 In this session we'll be building seven examples together, introducing you to:
 
@@ -20,7 +20,7 @@ On your computer:
 
 1. On your computer, install [Evothings Studio](https://evothings.com).
     * When you start Evothings Studio it will ask for a 'Cloud token', you can get one on the downloads page.
-1. Download the source code for this workshop from [here](https://github.com/ARMmbed/eiab-bluetooth-le/archive/master.zip) - and unpack in a convenient location.
+1. Download the source code for this workshop from [here](https://github.com/ARMmbed/workshop-ada-lovelace-ble) - and unpack in a convenient location.
 
 On your Android or iOS device:
 
@@ -29,8 +29,9 @@ On your Android or iOS device:
 
 ## Setup
 
-1. Connect the *Microcontroller name* board to your computer. *If more instructions are needed, add them here (for example, which USB connection to use).*
-1. The board mounts as a mass-storage device (like a USB drive). Verify that you can see it (the drive name will be MBED).
+1. Attach the BLE Shield to your development board.
+1. Connect the NUCLEO_F401RE board to your computer.
+1. The board mounts as a mass-storage device (like a USB drive). Verify that you can see it (the drive name will be NUCLEO).
 1. Go to [http://developer.mbed.org](http://developer.mbed.org).
 1. Create an ARM mbed account if you do not have one.
 1. On the top right corner, click the Compiler button.
@@ -44,10 +45,10 @@ On your Android or iOS device:
 
 ## 1. Blinky
 
-1. First we need to set up our project and our target. Go to *[link to microcontroller platform page]()* and click the **Add to your mbed Compiler** button.
+1. First we need to set up our project and our target. Go to the [NUCLEO_F401RE platform page](https://developer.mbed.org/platforms/ST-Nucleo-F401RE/) and click the **Add to your mbed Compiler** button.
 1. Go back to the compiler browser window and refresh the page.
 1. Click the Import button, then click **Click Here to import from URL**.
-1. Paste the following URL: *Your fork of the eiab-bluetooth-le repository*.
+1. Paste the following URL: https://github.com/ARMmbed/workshop-ada-lovelace-ble.
 1. Click the **Import** button.
 1. In the top right corner, verify that the right development board is selected.
 
@@ -68,9 +69,8 @@ static void blinky() {
 
 1. Now press Compile.
 1. A file downloads.
-1. Drag the file to the 'MBED' disk.
-1. The green LED next to the USB cable will flash.
-1. *If more instructions are needed (for example, pressing the RESET button), add them here.*
+1. Drag the file to the 'NUCLEO' disk.
+1. The red LED on your board will flash.
 1. Blinky runs!
 
 **Optional:** We use [Ticker](https://developer.mbed.org/handbook/Ticker) to periodically run the blinky function. You could also use [Timeout](https://developer.mbed.org/handbook/Timeout) to run a function after a specified delay. Rewrite the code so that it uses the Timeout class. Afterwards see if you can vary the time between blinks ([hint](http://www.cplusplus.com/reference/cstdlib/rand/)).
@@ -252,7 +252,52 @@ We brought three types of sensors, of which you can pick one:
 * Ultrasonic distance sensor - measure how close someone is to your device.
 * Light sensor - measure how light it is around you.
 
-*This is workshop dependent. Use the boilerplate in ``5_adding_sensors`` to describe how to connect each of these sensors to the development board. Please use the ``mySensorState`` characteristic to store the data, as we'll be using it in the next example.*
+First, switch to the right project.
+
+1. In 'select_project.h' change the number to `2`.
+1. Open ``5_adding_sensors/main.h``.
+1. **Important:** First, on line 7, change the name of your device to a unique identifier (shorter than 15 characters).
+
+### Ultrasonic distance sensor
+
+1. Place the sensor on your breadboard.
+1. Connect GND->GND.
+1. Connect VCC on the ultrasonic sensor to 5V on the Nucleo board.
+1. Connect Echo to D9.
+1. Connect Trig to D10.
+
+Now we can add a library which can read data from this sensor. In the online compiler:
+
+1. Right click on your project.
+1. Select 'Import Library' -> 'From import wizard'.
+1. Type `HCSR04` (this is the name of the sensor).
+1. Select the library by 'Antoniolinux B.'.
+1. Double click to import.
+
+In `5_adding_sensors\main.cpp` under 'YOUR CODE HERE' add:
+
+```cpp
+// initialize the sensor
+#include "hcsr04.h"
+HCSR04 ultrasonic(D10, D9);
+
+// this will be running in a separate thread
+void readSensorState() {
+    // give the BLE stack 5 seconds to start up
+    wait_ms(5000);
+
+    // infinite loop
+    while (1) {
+        // read the value, print it and update the BLE variable
+        long dist = ultrasonic.distance();
+        printf("distance is %d\r\n", dist);
+        mySensorState = dist;
+
+        // then sleep for 2 seconds
+        wait_ms(2000);
+    }
+}
+```
 
 Verify that you can see the values update in nRF Connect.
 

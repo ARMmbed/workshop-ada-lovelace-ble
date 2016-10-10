@@ -6,35 +6,26 @@ static EventQueue eventQueue(10 * 32);   // use an event queue to dispatch event
 
 SimpleBLE ble("YOUR_NAME_HERE", 100);    // change this to your *unique* name
 
-DigitalOut led1(D4);         // we create a variable 'led1', use it as an out port
-
 DigitalOut alivenessLed(LED1);
 
-void updateLedOverBle(bool newValue) {  // a new value was written to the LED characteristic
-    led1 = newValue;
-}
-
-// we create the LED state, which you can read & write, plus a callback method
-SimpleChar<bool> ledState = ble.readWrite_bool(0x6810, 0x6811, &updateLedOverBle);
-
 // This is the sensor state, which we can only read
-SimpleChar<uint32_t> mySensorState = ble.readOnly_u32(0x6920, 0x6921);
+SimpleChar<uint32_t> mySensorState = ble.readOnly_u32(0x6710, 0x6711);
 
 void alive() {
     alivenessLed = !alivenessLed;
 }
 
 // YOUR CODE HERE
-// void readSensorState() {
-//     mySensorState = mySensorState + 1;
-// }
+
 
 // this code runs when the microcontroller starts up
 int main() {
-    // Use the event queue to process events, rather than Tickers
-    eventQueue.post_every(500, alive);
+    Ticker t1;
+    t1.attach(alive, 0.5f);
 
-    eventQueue.post_every(2000, readSensorState);
+    // mbed OS is an RTOS (realtime OS), so we have access to things like threads
+    Thread sensorThread;
+    sensorThread.start(&readSensorState);
 
     ble.start(&eventQueue);
 

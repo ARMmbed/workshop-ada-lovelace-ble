@@ -26,7 +26,8 @@ document.querySelector('#connect').onclick = function() {
       // subscribe to notifications, and push it to firebase
       sensorState.startNotifications();
       sensorState.addEventListener('characteristicvaluechanged', function(e) {
-        var state = e.target.value.getUint32(0);
+        var state = e.target.value.getUint8(0) + (e.target.value.getUint8(1) << 8) +
+            (e.target.value.getUint8(2) << 16) + (e.target.value.getUint8(3) << 24);
 
         document.querySelector('#sensor-value').textContent = state;
 

@@ -76,8 +76,6 @@ function onConnected(ble, characteristics, updateState) {
       ret[cKeys[charIndex[ix]]] = gattChar;
     });
 
-    console.log('mapped is ' + Object.keys(ret) + ' ' + typeof ret.ledState);
-
     updateState('Connected');
 
     return ret;
