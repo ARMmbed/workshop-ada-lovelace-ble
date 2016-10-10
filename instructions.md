@@ -102,6 +102,23 @@ static void toggle_led() {
 
 Use the above pattern in combination with 'Optional 1'. Start the blinking when a button is pressed, then stop the blinking when the button is pressed a second time.
 
+## 2b. Building a circuit
+
+We currently control the built-in LED on the board. But we can also add new LEDs to the circuit using the breadboard. We need this to have more than one LED. Here is the pinout of the board for reference:
+
+![Nucleo F401RE pinout](https://developer.mbed.org/media/uploads/bcostm/xnucleo64_revc_f401re_mbed_pinout_v3_arduino.png.pagespeed.ic.mGMPv8rEDv.jpg)
+
+1. In ``main.cpp`` change `LED1` into `D4`. This means we will use pin D4 on the development board to control an output port.
+1. Hook the circuit up:
+    * Wire from pin D4 to your breadboard (B1).
+    * Put a resistor on the breadboard (one end at B1).
+    * On the other end of the resistor put the long leg of the LED.
+    * On the short leg of the LED, put a wire to GND.
+1. For a schematic overview, click [here](http://wiki.seeedstudio.com/images/thumb/d/d6/Arduino_Sidekick_1LED_Blink.jpg/400px-Arduino_Sidekick_1LED_Blink.jpg).
+1. Compile the program, and verify that the LED on the breadboard is now controlled.
+
+**Optional:** You can do the same thing for the button. Use pin D5, and wire up like [this](https://www.arduino.cc/en/uploads/Tutorial/button.png) (use a 10K Ohm resistor).
+
 ## 3. Over Bluetooth Low Energy
 
 1. In 'select_project.h' change the number to `2`.
@@ -121,12 +138,7 @@ On your development board we will define two services:
 
 ```cpp
 void updateLedOverBle(bool newValue) {  // a new value was written to the LED characteristic
-    if (newValue == true) {    // change the state of the LED to the value written
-        led1 = BUILT_IN_LED_ON;
-    }
-    else {
-        led1 = BUILT_IN_LED_OFF;
-    }
+    led1 = newValue;
 }
 
 // we create the LED state, which you can read & write, plus a callback method
@@ -143,7 +155,7 @@ void btn_fall() {
 }
 ```
 
-1. Press the **Compile** button and flash the application. LED2 should start blinking to indicate that the application is running.
+1. Press the **Compile** button and flash the application. LED1 should start blinking to indicate that the application is running.
 
 ### Seeing your values in nRF Connect
 
@@ -168,7 +180,7 @@ We can use these buttons to control the device from our phone.
 1. In the first dropdown menu, select `BYTE`.
 1. In the value textbox type `01`.
 1. Click 'SEND'.
-1. LED1 turns on.
+1. The LED on your breadboard turns on.
 1. Send `00` to turn the LED off.
 
 Congratulations, we have a connection with your device. We can now start writing an app.
