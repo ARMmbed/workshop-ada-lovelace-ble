@@ -117,6 +117,8 @@ We currently control the built-in LED on the board. But we can also add new LEDs
 1. For a schematic overview, click [here](http://wiki.seeedstudio.com/images/thumb/d/d6/Arduino_Sidekick_1LED_Blink.jpg/400px-Arduino_Sidekick_1LED_Blink.jpg).
 1. Compile the program, and verify that the LED on the breadboard is now controlled.
 
+![LED on a breadboard](img/ble2.jpg)
+
 **Optional:** You can do the same thing for the button. Use pin D5, and wire up like [this](https://www.arduino.cc/en/uploads/Tutorial/button.png) (use a 10K Ohm resistor).
 
 ## 3. Over Bluetooth Low Energy
@@ -190,6 +192,7 @@ Congratulations, we have a connection with your device. We can now start writing
 ## 4. Building an app
 
 1. You should have downloaded Evothings Studio on your computer. Launch it.
+1. On first launch you'll need to generate a 'CLOUD TOKEN'. You can do this [here](https://evothings.com/download/).
 1. Click 'CONNECT', and click 'GET KEY'.
 1. On your phone, launch Evothings Viewer.
 1. Type the same code as on your computer to connect computer and phone.
@@ -198,7 +201,9 @@ Congratulations, we have a connection with your device. We can now start writing
 1. Click 'RUN'.
 1. On your phone you should have a running app. Type the name of your device in and press 'Connect' to connect to your phone.
 1. Nothing will work after connecting, we will write some code first.
-2. Open `4_an_app/app.js` in your code editor of choice.
+1. Open `4_an_app/app.js` in your code editor of choice.
+
+**Note:** When changing files in the app, the app on your phone will automatically reload. Often you'll need to reset your board when that happens, due to a bug in the Evothings BLE library. Press the black RESET button.
 
 We can write code to read characteristics, subscribe to new values, or write characteristics.
 
