@@ -2,9 +2,10 @@
 
 DigitalOut led1(LED1);         // we create a variable 'led1', use it as an out port
 
-InterruptIn btn1(BUTTON1);     // we create a variable 'btn1', use it as an in port
+InterruptIn btn1(BLE_BUTTON_PIN_NAME);     // we create a variable 'btn1', use it as an in port
 
 // YOUR CODE HERE
+
 
 // this code runs when the microcontroller starts up
 int main() {

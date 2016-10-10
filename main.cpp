@@ -19,9 +19,6 @@
 #define BUILT_IN_LED_OFF        1
 #define BUILT_IN_LED_ON         0
 
-// If your target does not have BUTTON1, uncomment this line
-// #define BUTTON1                 p17
-
 #if PROJECT == 1
 #include "1_blinky/main.h"
 #elif PROJECT == 2
@@ -30,10 +27,6 @@
 #include "3_over_ble/main.h"
 #elif PROJECT == 5
 #include "5_adding_sensors/main.h"
-#elif PROJECT == 6
-#include "6_songs-from-the-cloud/main.h"
-#elif PROJECT == 7
-#include "7_waveforms/main.h"
 #else
-#error "Select a project (between 1 and 7) in select_project.h first!"
+#error "Select a project (between 1 and 5) in select_project.h first!"
 #endif
