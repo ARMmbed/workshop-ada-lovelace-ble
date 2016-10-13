@@ -48,6 +48,15 @@ On your Android or iOS device:
 
 **Local development:** If you like things locally, you can do so by using [mbed CLI](https://docs.mbed.com/docs/mbed-os-handbook/en/5.1/getting_started/blinky_cli/#installing-mbed-cli-and-a-toolchain). I very much recommend to just use the online IDE, as it makes it easier for us, but if you want to continue hacking in the future, this is a nice way.
 
+## Updating the firmware on the board
+
+Download [stsw-link-007.zip](http://janjongboom.com/downloads/
+stsw-link007.zip), and open 'AllPlatforms\STLinkUpgrade.jar'. Click 'Open in update mode' and then click 'Update'.
+
+> If the file is not clickable, but you do have Java installed, run `java -jar STLinkUpgrade.jar` from the command line...
+
+Or ask Jan to do it for you :-).
+
 ## 1. Blinky
 
 1. First we need to set up our project and our target. Go to the [NUCLEO_F401RE platform page](https://developer.mbed.org/platforms/ST-Nucleo-F401RE/) and click the **Add to your mbed Compiler** button.
@@ -70,7 +79,7 @@ static void blinky() {
     // the flipped value is what we write back to the LED, thus toggling the LED.
     myled = !myled;
 
-    printf("blink! led is now %d\r\n", myled);
+    printf("blink! led is now %d\r\n", myled ? 1 : 0);
 }
 ```
 
@@ -144,7 +153,7 @@ To exit, press `CTRL+A` then type `:quit`.
 static void toggle_led() {
     led1 = !led1;
 
-    printf("toggle, led is now %d\r\n", led1);
+    printf("toggle, led is now %d\r\n", led1 ? 1 : 0);
 }
 ```
 

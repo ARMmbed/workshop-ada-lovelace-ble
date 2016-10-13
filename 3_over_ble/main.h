@@ -13,12 +13,15 @@ DigitalOut alivenessLed(LED1);
 
 // YOUR CODE HERE
 
+
 void alive() {
     alivenessLed = !alivenessLed;
 }
 
 // this code runs when the microcontroller starts up
 int main() {
+    printf("Hello world...\r\n");
+
     Ticker t;
     t.attach(&alive, 0.5f);
 
