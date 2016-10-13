@@ -480,6 +480,8 @@ We can now connect arbitrary sensors to your phone, but what if we want to see t
 
 We can use your phone (or actually, any old phone) as a 'gateway'. A device that will grab data over Bluetooth and stream it to a cloud provider where you can store that data. We'll now store this data in Firebase.
 
+**Note:** If it says something like 'service not found', open ``6_to_the_cloud\app.js``, add a space or something and save, the app should re-load and it should work (bug in Evothings).
+
 1. First, we need an account at Firebase.
 1. Go to http://firebase.google.com
 1. Click 'Get started'.

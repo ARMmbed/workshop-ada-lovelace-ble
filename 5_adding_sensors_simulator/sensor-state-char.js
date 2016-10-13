@@ -19,7 +19,7 @@ var SensorStateChar = function() {
 util.inherits(SensorStateChar, Characteristic);
 
 SensorStateChar.prototype.formatValue = function(temp) {
-  var t = Math.floor(temp * 100);
+  var t = Math.round(temp * 100);
   return new Buffer([ t & 0xff, t >> 8, 0x00, 0x00 ]);
 };
 
@@ -28,6 +28,8 @@ SensorStateChar.prototype.onReadRequest = function(offset, callback) {
 };
 SensorStateChar.prototype.onSubscribe = function(maxValueSize, updateValueCallback) {
   console.log('Subscribed to sensor events');
+
+  clearInterval(this._uvcIv);
 
   this._uvcIv = setInterval(function() {
     // between this._value and this._value + 0.5

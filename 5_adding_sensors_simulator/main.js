@@ -26,6 +26,7 @@ bleno.on('advertisingStart', function(error) {
   if (!error) {
     bleno.setServices([sensorService], function(error){
       console.log('setServices: '  + (error ? 'error ' + error : 'success'));
+      console.log('Listening under name \'' + MY_UNIQUE_NAME + '\'');
     });
   }
 });
