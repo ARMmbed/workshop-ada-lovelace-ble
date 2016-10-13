@@ -21,6 +21,12 @@ On your computer:
 1. On your computer, install [Evothings Studio](https://evothings.com).
     * When you start Evothings Studio it will ask for a 'Cloud token', you can get one on the downloads page.
 1. Download the source code for this workshop from [here](https://github.com/ARMmbed/workshop-ada-lovelace-ble) - and unpack in a convenient location.
+1. If we are using the simulator: [node.js](https://nodejs.org).
+
+If you are on Windows, also install:
+
+1. The [mbed serial driver]().
+1. [Tera term]() - to see debug messages from the board.
 
 On your Android or iOS device:
 
@@ -36,10 +42,6 @@ On your Android or iOS device:
 1. Create an ARM mbed account if you do not have one.
 1. On the top right corner, click the Compiler button.
 1. An IDE should open. Congratulations!
-
-**On Windows:** To see debug messages, install the serial driver.
-
-**Debug messages:** We can talk to the board via a serial port, but you might need some software. Read [this doc](https://developer.mbed.org/handbook/SerialPC#host-interface-and-terminal-applications) and install the listed software (like PuTTY or Tera Term on Windows).
 
 **Local development:** If you like things locally, you can do so by using [mbed CLI](https://docs.mbed.com/docs/mbed-os-handbook/en/5.1/getting_started/blinky_cli/#installing-mbed-cli-and-a-toolchain). I very much recommend to just use the online IDE, as it makes it easier for us, but if you want to continue hacking in the future, this is a nice way.
 
@@ -64,6 +66,8 @@ static void blinky() {
     // the LED is either on or off (a 1 or a 0). We can inverse the value with the `!` (inverse operator).
     // the flipped value is what we write back to the LED, thus toggling the LED.
     myled = !myled;
+
+    printf("blink! led is now %d\r\n", myled);
 }
 ```
 
@@ -74,6 +78,41 @@ static void blinky() {
 1. Blinky runs!
 
 **Optional:** We use [Ticker](https://developer.mbed.org/handbook/Ticker) to periodically run the blinky function. You could also use [Timeout](https://developer.mbed.org/handbook/Timeout) to run a function after a specified delay. Rewrite the code so that it uses the Timeout class. Afterwards see if you can vary the time between blinks ([hint](http://www.cplusplus.com/reference/cstdlib/rand/)).
+
+### Showing debug messages
+
+To show debug messages we need a serial monitor. Follow the instructions below. Your output should be:
+
+```
+blink! led is now 0
+blink! led is now 1
+blink! led is now 0
+```
+
+#### Windows
+
+To see debug messages, install:
+
+1. The [mbed serial driver]().
+2. [Tera Term]().
+
+@todo write more
+
+#### OS/X
+
+No need to install a driver. Open a terminal and run:
+
+```
+screen /dev/tty.usbm            # now press TAB to autocomplete and then ENTER
+```
+
+#### Linux
+
+If it's not installed, install GNU screen (`sudo apt-get install screen`). Then open a terminal and run:
+
+```
+screen /dev/ttyACM              # now press TAB to autocomplete and then ENTER
+```
 
 ## 2. Processing input
 
@@ -87,6 +126,8 @@ static void blinky() {
 ```cpp
 static void toggle_led() {
     led1 = !led1;
+
+    printf("toggle, led is now %d\r\n", led1);
 }
 ```
 
@@ -159,6 +200,32 @@ void btn_fall() {
 
 1. Press the **Compile** button and flash the application. LED1 should start blinking to indicate that the application is running.
 
+### Using the simulator
+
+This excercise can also be ran in a simulator, in case the BLE shields are not working. Here your computer will act as the Bluetooth Low Energy device. A lot less exciting, but at least we can do a workshop.
+
+To set up:
+
+1. Install [node.js](https://nodejs.org).
+1. Look at the [dependencies](https://github.com/sandeepmistry/bleno#prerequisites) for your operating system, and install them.
+1. Open ``3_over_ble_simulator\main.js`` and change `MY_NAME` into a **unique** (short) name.
+1. Open a terminal or command window and navigate to the folder where you extracted 'workshop-ada-lovelace-ble'.
+1. Run `cd 3_over_ble_simulator`.
+1. Run `npm install` - to install dependencies.
+1. Run `node main.js`.
+    * (might need to run as sudo on Linux).
+
+You should see output similar to:
+
+```
+Button is not pressed, press 'p' to press
+on -> stateChange: poweredOn
+on -> advertisingStart: success
+setServices: success
+```
+
+Your setup is now complete, and you can follow along again.
+
 ### Seeing your values in nRF Connect
 
 We can verify that everything works in the nRF Connect app.
@@ -174,6 +241,8 @@ We can verify that everything works in the nRF Connect app.
 * In pink we see the service UUIDs (`6810` and `6910`).
 * The buttons in red are to control the LED state (down is retrieve, up is update).
 * The button in green can be used to subscribe to the button state.
+
+**Note:** Do not see the right services after connecting? Tap the options menu and select 'Clear device cache' or 'Refresh services'.
 
 We can use these buttons to control the device from our phone.
 
@@ -258,9 +327,11 @@ First, switch to the right project.
 1. Open ``5_adding_sensors/main.h``.
 1. **Important:** First, on line 7, change the name of your device to a unique identifier (shorter than 15 characters).
 
+**Note:** If we are using the simulator, we can still see sensor values coming through on the development board. Comment line 30 (`ble.start(&eventQueue);`) out and look at the debug logs.
+
 ### Temperature sensor
 
-1. Place the sensor on your breadboard. 
+1. Place the sensor on your breadboard.
 1. The rounded side is the back of the sensor. **Don't get this wrong or you'll blow up the sensor!**
 1. Seen from the front, connect:
 1. Left pin to 5V.
@@ -379,6 +450,29 @@ void readSensorState() {
 Verify that you can see the values update in nRF Connect.
 
 **Optional:** Don't limit yourself to just these sensors. Replace the built-in LED with a multicolor LED. Change the characteristic type to `u32` and encode color information in the characteristic. Allow the LED color to be controlled through Bluetooth.
+
+## 5b. Using the simulator
+
+Similar to what we did in 3, we can use the simulator on your computer if the BLE shield is not available. It will spit out fake temperature values which you can control using your keyboard (`u` and `d` keys).
+
+1. Open ``5_adding_sensors_simulator\main.js`` and change `MY_NAME` into a **unique** (short) name.
+1. Open a terminal or command window and navigate to the folder where you extracted 'workshop-ada-lovelace-ble'.
+1. Run `cd 5_adding_sensors_simulator`.
+1. Run `npm install` - to install dependencies.
+1. Run `node main.js`.
+    * (might need to run as sudo on Linux).
+
+You should see output similar to:
+
+```
+Temperature is floating between 21 and 21.5 degrees. Press 'u' for up, 'd' for down.
+on -> stateChange: poweredOn
+on -> advertisingStart: success
+setServices: success
+```
+
+Your setup is now complete, and you can follow along again.
+
 
 ## 6. Connecting to the cloud
 

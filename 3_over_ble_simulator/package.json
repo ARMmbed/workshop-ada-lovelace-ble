@@ -1,0 +1,17 @@
+{
+  "name": "over-ble-simulator",
+  "version": "0.1.0",
+  "description": "Simulating LED and Button service over BLE",
+  "main": "main.js",
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "author": {
+    "name": "Jan Jongboom <jan.jongboom@arm.com>",
+    "url": "http://janjongboom.com"
+  },
+  "dependencies": {
+    "bleno": "^0.4.1"
+  }
+}
