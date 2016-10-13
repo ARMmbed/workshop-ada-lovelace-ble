@@ -11,8 +11,6 @@ DigitalOut alive(LED1);     // to know if the program is still running
 
 // this code runs when the microcontroller starts up
 int main() {
-    led1 = BUILT_IN_LED_OFF; // turn off led1 on startup
-
     btn1.fall(toggle_led);
 
     // spin in a main loop. Wait for interrupts.
