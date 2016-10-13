@@ -13,5 +13,8 @@ int main() {
     flipper.attach(&blinky, 0.5); // the address of the function to be attached (flip) and the interval (in seconds)
 
     // spin in a main loop. flipper will interrupt it to call flip
-    while(1) {}
+    while(1) {
+        Thread::wait(200);
+        printf("LED is %d\r\n", myled ? 1 : 0);
+    }
 }

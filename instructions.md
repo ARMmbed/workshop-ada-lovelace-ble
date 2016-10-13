@@ -78,8 +78,6 @@ static void blinky() {
     // the LED is either on or off (a 1 or a 0). We can inverse the value with the `!` (inverse operator).
     // the flipped value is what we write back to the LED, thus toggling the LED.
     myled = !myled;
-
-    printf("blink! led is now %d\r\n", myled ? 1 : 0);
 }
 ```
 
