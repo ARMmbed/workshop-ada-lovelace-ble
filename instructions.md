@@ -142,40 +142,13 @@ To exit, press `CTRL+A` then type `:quit`.
 
 ## 2. Processing input
 
-1. In 'select_project.h' change the number to `2`.
-1. Open ``2_one_button/main.h``.
-1. We want to execute a function when the button is pressed.
-1. We already have code in place which responds when the buttons 'fall', which means the button is pressed.
-1. Let's write a similar function as before, but now we fire whenever someone presses the button.
-1. Under 'YOUR CODE HERE' add the following code:
-
-```cpp
-static void toggle_led() {
-    led1 = !led1;
-
-    printf("toggle, led is now %d\r\n", led1 ? 1 : 0);
-}
-```
-
-1. Press the **Compile** button and flash the application. Clicking on Button 1 will now toggle the LED.
-
-**Optional 1:** We use `fall` currently, which triggers when the button is clicked. We can also use `rise` to get an event when the button is no longer clicked. Change the code so that the LEDs only burn when the button is pressed down.
-
-**Optional 2:** When we start a periodic timer with a ticker, we can cancel the timer as well via:
-
-```cpp
-<name_of_ticker>.detach();
-```
-
-Use the above pattern in combination with 'Optional 1'. Start the blinking when a button is pressed, then stop the blinking when the button is pressed a second time.
-
-## 2b. Building a circuit
+## 2a. Building a circuit
 
 We currently control the built-in LED on the board. But we can also add new LEDs to the circuit using the breadboard. We need this to have more than one LED. Here is the pinout of the board for reference:
 
 ![Nucleo F401RE pinout](https://developer.mbed.org/media/uploads/bcostm/xnucleo64_revc_f401re_mbed_pinout_v3_arduino.png.pagespeed.ic.mGMPv8rEDv.jpg)
 
-1. In ``main.cpp`` change `LED1` into `D4`. This means we will use pin D4 on the development board to control an output port.
+1. In ``1_blinky\main.cpp`` change `LED1` to `D4`.
 1. Hook the circuit up:
     * Wire from pin D4 to your breadboard (B1).
     * Put a resistor on the breadboard (one end at B1).
@@ -186,7 +159,34 @@ We currently control the built-in LED on the board. But we can also add new LEDs
 
 ![LED on a breadboard](img/ble2.jpg)
 
-**Optional:** You can do the same thing for the button. Use pin D5, and wire up like [this](https://www.arduino.cc/en/uploads/Tutorial/button.png) (use a 10K Ohm resistor).
+**Optional:** You can do the same thing for the button. Use pin D9, and wire up like [this](http://energia.nu/img/Button_bb.png) (use a 10K Ohm resistor). So left-top to GND, left-bottom 10K resistor to 3.3V, right-bottom wire to D9.
+
+## 2b. Writing the code that responds to button presses
+
+1. In 'select_project.h' change the number to `2`.
+1. Open ``2_one_button/main.h``.
+1. We want to execute a function when the button is pressed.
+1. We already have code in place which responds when the buttons 'fall', which means the button is pressed.
+1. Let's write a similar function as before, but now we fire whenever someone presses the button.
+1. Under 'YOUR CODE HERE' add the following code:
+
+```cpp
+static void toggle_led() {
+    led1 = !led1;
+}
+```
+
+1. Press the **Compile** button and flash the application. Clicking on Button 1 will now toggle the LED. The built-in LED will blink when the application is alive... Does it crash? Hit the black button on the board.
+
+**Optional 1:** We use `fall` currently, which triggers when the button is clicked. We can also use `rise` to get an event when the button is no longer clicked. Change the code so that the LEDs only burn when the button is pressed down.
+
+**Optional 2:** When we start a periodic timer with a ticker, we can cancel the timer as well via:
+
+```cpp
+<name_of_ticker>.detach();
+```
+
+Use the above pattern in combination with 'Optional 1'. Start the blinking when a button is pressed, then stop the blinking when the button is pressed a second time.
 
 ## 3. Over Bluetooth Low Energy
 
