@@ -129,6 +129,8 @@ Then connect to the board using screen:
 sudo screen /dev/ttyACM0 9600                # might not need sudo if set up lsusb rules properly
 ```
 
+To exit, press `CTRL+A` then type `:quit`.
+
 ## 2. Processing input
 
 1. In 'select_project.h' change the number to `2`.
