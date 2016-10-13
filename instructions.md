@@ -25,8 +25,11 @@ On your computer:
 
 If you are on Windows, also install:
 
-1. The [mbed serial driver]().
-1. [Tera term]() - to see debug messages from the board.
+1. [ST Link](http://janjongboom.com/downloads/st-link.zip) - serial driver for the board.
+    * Run `dpinst_amd64` on 64-bits Windows, `dpinst_x86` on 32-bits Windows.
+    * Afterwards, unplug your board and plug it back in.
+    * (Not sure if it configured correctly? Look in 'Device Manager > Ports (COM & LPT)', should list as STLink Virtual COM Port.
+1. [Tera term](https://osdn.net/projects/ttssh2/downloads/66361/teraterm-4.92.exe/) - to see debug messages from the board.
 
 On your Android or iOS device:
 
@@ -93,10 +96,13 @@ blink! led is now 0
 
 To see debug messages, install:
 
-1. The [mbed serial driver]().
-2. [Tera Term]().
+1. [ST Link](http://janjongboom.com/downloads/st-link.zip) - serial driver for the board.
+    * See above for more instructions.
+1. [Tera term](https://osdn.net/projects/ttssh2/downloads/66361/teraterm-4.92.exe/) - to see debug messages from the board.
 
-@todo write more
+When you open Tera Term, select *Serial*, and then select the STLink COM Port.
+
+![Tera Term](img/tera1.png)
 
 #### OS/X
 
@@ -106,12 +112,21 @@ No need to install a driver. Open a terminal and run:
 screen /dev/tty.usbm            # now press TAB to autocomplete and then ENTER
 ```
 
+To exit, press: `CTRL+A` then `CTRL+\` then press `y`.
+
 #### Linux
 
-If it's not installed, install GNU screen (`sudo apt-get install screen`). Then open a terminal and run:
+If it's not installed, install GNU screen (`sudo apt-get install screen`). Then open a terminal and find out the handler for your device:
 
 ```
-screen /dev/ttyACM              # now press TAB to autocomplete and then ENTER
+$ ls /dev/ttyACM*
+/dev/ttyACM0
+```
+
+Then connect to the board using screen:
+
+```
+sudo screen /dev/ttyACM0 9600                # might not need sudo if set up lsusb rules properly
 ```
 
 ## 2. Processing input
@@ -545,5 +560,12 @@ Now see data from many sensors flow into the same charts!
 ## 8. Play around
 
 That was the formal part of this workshop! We hope that you have got a great introduction to building device software with ARM mbed, building apps with Evothings and storing data in the cloud.
+
+We have other sensors with us that you can use to build some great prototypes:
+
+* Buzzer - to play sounds - use [PwmOut](https://developer.mbed.org/handbook/PwmOut) to drive the buzzer.
+* PIR-sensor - for motion sensing - use [InterruptIn](https://developer.mbed.org/handbook/InterruptIn) to detect when motion happens (connect to 5V, pinout is under the dome).
+* Servo - to move things around - use [PwmOut](https://developer.mbed.org/handbook/PwmOut) to control the servo.
+* Plus some random things like rain sensors...
 
 Feel free to keep hacking, and come up with some great ideas!
